@@ -2,7 +2,7 @@
   "name": "sysl",
   "displayName": "SysL",
   "description": "Language server client and syntax highlighting for sysl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "sysl-lang",
   "license": "ISC",
   "repository": {
@@ -48,6 +48,11 @@
           "default": "sysl",
           "description": "The sysl executable. The extension runs it as '<path> lsp --stdio'."
         },
+        "sysl.lib": {
+          "type": "string",
+          "default": "",
+          "description": "The standard library root, passed to the server as SYSL_LIB. Empty leaves the environment as it is, which is what an installed sysl wants."
+        },
         "sysl.trace.server": {
           "type": "string",
           "enum": [
@@ -59,7 +64,13 @@
           "description": "Traces the messages exchanged with the language server in the SysL output channel."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "sysl.restartServer",
+        "title": "SysL: Restart Language Server"
+      }
+    ]
   },
   "scripts": {
     "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=out/extension.cjs --sourcemap",

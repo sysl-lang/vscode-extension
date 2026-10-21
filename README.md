@@ -17,7 +17,7 @@ Download `sysl-<version>.vsix` from the [releases page](https://github.com/sysl-
 then:
 
 ```
-code --install-extension sysl-0.1.0.vsix
+code --install-extension sysl-0.1.1.vsix
 ```
 
 or use *Extensions: Install from VSIX...* in the command palette. The extension is not published to
@@ -28,22 +28,27 @@ the Marketplace.
 | setting | default | meaning |
 |---|---|---|
 | `sysl.server.path` | `sysl` | the sysl executable; run as `<path> lsp --stdio` |
+| `sysl.lib` | empty | the standard library root, passed to the server as `SYSL_LIB`; an installed sysl needs none |
 | `sysl.trace.server` | `off` | `messages` or `verbose` traces the protocol in the *SysL* output channel |
 
-If the executable cannot be started, the extension says so and names this setting.
+If the executable cannot be started, the extension says so and names `sysl.server.path`. Changing
+`sysl.server.path` or `sysl.lib` restarts the server, and so does *SysL: Restart Language Server*.
 
-## Not in 0.1.0
+## Not in this release
 
 Tasks, a test explorer, debugging and Marketplace publishing. The language features are whatever
 `sysl lsp` implements: diagnostics, hover and definition.
 
 ## Grammar
 
-`syntaxes/sysl.tmLanguage.json` is copied from the texish project
-(`texish/grammars/sysl.tmLanguage.json`, last changed in commit
-`56fe178af9fedad33f3778a1ecc6710be350f2b7`). It highlights line comments, strings (including the
-`s`, `f`, `raw` and `c` prefixes), numbers, keywords, types and declarations. It does not yet
-tokenize nested `/* */` block comments or tripled (`"""`) text blocks.
+`syntaxes/sysl.tmLanguage.json` is a byte-identical copy of the compiler's
+`docs/grammars/sysl.tmLanguage.json` at sysl commit
+[`faf3b48a`](https://github.com/sysl-lang/sysl/commit/faf3b48a1a50cd8a3a184c8d6db00b876d2c37b0) —
+the grammar the documentation site renders with, and which a sysl release ships as
+`share/sysl/editors/sysl.tmLanguage.json`. A change to it is made there and copied here. It is
+tested against the language's lexical rules in
+[`sysl-lang/highlighter`](https://github.com/sysl-lang/highlighter) (`sysl_grammar_tests.sysl`):
+nested block comments, text blocks and their holes, number suffixes, `:=`, the contextual words.
 
 ## Development
 

@@ -78,6 +78,16 @@ test("hover answers a sysl code block", async () => {
     assert.match(hover.contents.value, /^```sysl\n[\s\S]*double[\s\S]*\n```$/)
 })
 
+test("definition of a call answers where the function is declared", async () => {
+    const there = await conn.sendRequest("textDocument/definition", {
+        textDocument: { uri },
+        position: { line: 4, character: 12 },
+    }) as { uri: string, range: { start: { line: number, character: number }, end: { line: number, character: number } } } | null
+    assert.ok(there !== null, "definition on the call 'double' returned null")
+    assert.equal(there.uri, uri)
+    assert.deepEqual(there.range, { start: { line: 0, character: 0 }, end: { line: 0, character: 6 } })
+})
+
 test("shutdown and exit end the server", async () => {
     await conn.sendRequest("shutdown")
     const exited = new Promise<number | null>(resolve => child.once("exit", code => resolve(code)))
